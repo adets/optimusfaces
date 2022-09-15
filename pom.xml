@@ -2,13 +2,13 @@
 <project
 	xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
 >
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.omnifaces</groupId>
 	<artifactId>optimusfaces</artifactId>
-	<version>0.16</version>
+	<version>0.16-ad-1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>OptimusFaces</name>
@@ -41,18 +41,21 @@
 		</license>
 	</licenses>
 
-	<scm>
-		<url>https://github.com/omnifaces/optimusfaces</url>
-		<connection>scm:git:git://github.com/omnifaces/optimusfaces.git</connection>
-		<developerConnection>scm:git:git@github.com:omnifaces/optimusfaces.git</developerConnection>
-	</scm>
-
-	<distributionManagement>
-		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
+    <scm>
+        <connection>scm:git:git@github.com:adets/optimusfaces.git</connection>
+        <developerConnection>scm:git:git@github.com:adets/optimusfaces.git</developerConnection>
+    </scm>
+    
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <url>file:///C:/Users/Alexey/Documents/Repository/Releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <url>file:///C:/Users/Alexey/Documents/Repository/Snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 	<properties>
 
@@ -100,7 +103,7 @@
 		<dependency>
 			<groupId>org.omnifaces</groupId>
 			<artifactId>omnipersistence</artifactId>
-			<version>0.19</version>
+			<version>0.20</version>
 		</dependency>
 
 		<!-- PrimeFaces dependencies. -->
@@ -309,18 +312,14 @@
 				</executions>
 			</plugin>
 
-			<!-- Configure snapshot deployment to Sonatype. -->
-			<plugin>
-				<groupId>org.sonatype.plugins</groupId>
-				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.13</version>
-				<extensions>true</extensions>
-				<configuration>
-					<serverId>ossrh</serverId>
-					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-					<autoReleaseAfterClose>true</autoReleaseAfterClose>
-				</configuration>
-			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-plugin</artifactId>
+                <configuration>
+                    <tag>${project.artifactId}-${project.version}</tag>
+                </configuration>
+            </plugin>
+
 		</plugins>
 
 		<pluginManagement>

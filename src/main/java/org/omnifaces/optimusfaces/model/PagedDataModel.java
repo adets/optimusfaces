@@ -1082,6 +1082,15 @@ public interface PagedDataModel<E extends Identifiable<?>> extends Serializable 
 			this.dynamicCriteria = dynamicCriteria;
 			return this;
 		}
+		
+        public Builder<E> ordering(LinkedHashMap<String, Boolean> ordering) {
+            if (!this.ordering.isEmpty()) {
+                throw new IllegalStateException("Ordering is already set");
+            }
+
+            this.ordering = ordering;
+            return this;
+        }
 
 		/**
 		 * <p>

@@ -315,7 +315,7 @@ public class LazyPagedDataModel<E extends Identifiable<?>> extends LazyDataModel
 	}
 
 	protected String processGlobalFilter(FacesContext context, DataTable table, Map<String, FilterMeta> filterBy) {
-		String globalFilter = getFilterValue(filterBy, GLOBAL_FILTER);
+		String globalFilter = (String) getFilterValue(filterBy, GLOBAL_FILTER);
 
 		if (globalFilter != null) {
 			globalFilter = globalFilter.trim();
@@ -328,9 +328,9 @@ public class LazyPagedDataModel<E extends Identifiable<?>> extends LazyDataModel
 		return isEmpty(globalFilter) ? null : globalFilter;
 	}
 
-	private String getFilterValue(Map<String, FilterMeta> filterBy, String field) {
+	private Object getFilterValue(Map<String, FilterMeta> filterBy, String field) {
 		FilterMeta filterMeta = filterBy.get(field);
-		return (filterMeta == null) ? null : (String) filterMeta.getFilterValue();
+		return (filterMeta == null) ? null : filterMeta.getFilterValue();
 	}
 
 	private String getFilterParameterName(FacesContext context, DataTable table, String field) {
