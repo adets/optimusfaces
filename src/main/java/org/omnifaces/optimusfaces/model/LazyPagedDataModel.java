@@ -478,6 +478,20 @@ public class LazyPagedDataModel<E extends Identifiable<?>> extends LazyDataModel
 			.collect(Collectors.toMap(FilterMeta::getField, identity())); // TODO: optimize/cache this
 	}
 
+    @Override
+    public FilterMeta getFilter(String field) {
+        FilterMeta filterMeta = getFilters().get(field);
+
+        if (filterMeta == null) {
+            filterMeta = FilterMeta.builder()
+                                   .field(field)
+                                   .build();
+            this.filters.put(field, filterMeta);
+        }
+
+        return filterMeta;
+    }
+
 	@Override
 	public List<E> getFilteredValue() {
 		return filteredValue;

@@ -927,6 +927,7 @@ public interface PagedDataModel<E extends Identifiable<?>> extends Serializable 
 
 	SortMeta getOrdering(); // TODO: support new multisort feature
 	Map<String, FilterMeta> getFilters();
+	FilterMeta getFilter(String field);
 
 	List<E> getFilteredValue();
 	void setFilteredValue(List<E> filteredValue);
