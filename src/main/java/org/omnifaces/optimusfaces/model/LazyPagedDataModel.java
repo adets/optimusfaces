@@ -519,21 +519,19 @@ public class LazyPagedDataModel<E extends Identifiable<?>> extends LazyDataModel
 	// Helpers ---------------------------------------------------------------------------------------------------------
 
 	private static Object normalizeCriteriaValue(Object value) {
-		Set<Object> set = stream(value).collect(toLinkedSet());
-		return set.size() == 1 ? set.iterator().next() : unmodifiableSet(set);
+		return unmodifiableSet(stream(value).collect(toLinkedSet()));
 	}
 
-	private static Object mergeCriteriaValue(Object oldValue, Object newValue) {
-		Map<String, Object> newValues = stream(newValue).collect(toLinkedMap(Object::toString));
-		newValues.keySet().removeAll(stream(oldValue).map(Object::toString).collect(toSet()));
+    private static Object mergeCriteriaValue(Object oldValue, Object newValue) {
+        Set<Object> oldValues = stream(oldValue).collect(toLinkedSet());
 
-		if (newValues.isEmpty()) {
-			return oldValue;
-		}
-		else {
-			return normalizeCriteriaValue(Stream.concat(stream(oldValue), stream(newValues.values())));
-		}
-	}
+        if (stream(newValue).allMatch(oldValues::contains)) {
+            return oldValue;
+        } else {
+            oldValues.addAll(stream(newValue).collect(toLinkedSet()));
+            return normalizeCriteriaValue(oldValues);
+        }
+    }
 
 	private static String getTrimmedQueryParameter(FacesContext context, String name) {
 		String param = getRequestParameter(context, name);
