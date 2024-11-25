@@ -21,7 +21,6 @@ import static java.util.Collections.unmodifiableSet;
 import static java.util.Optional.ofNullable;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 import static javax.faces.component.UIComponent.getCurrentComponent;
 import static org.omnifaces.persistence.model.Identifiable.ID;
 import static org.omnifaces.util.Ajax.oncomplete;
@@ -32,13 +31,13 @@ import static org.omnifaces.util.FacesLocal.getRequestParameterValues;
 import static org.omnifaces.util.FacesLocal.isAjaxRequest;
 import static org.omnifaces.utils.Lang.coalesce;
 import static org.omnifaces.utils.Lang.isEmpty;
-import static org.omnifaces.utils.stream.Collectors.toLinkedMap;
 import static org.omnifaces.utils.stream.Collectors.toLinkedSet;
 import static org.omnifaces.utils.stream.Streams.stream;
 import static org.primefaces.model.SortOrder.ASCENDING;
 import static org.primefaces.model.SortOrder.DESCENDING;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -518,9 +517,38 @@ public class LazyPagedDataModel<E extends Identifiable<?>> extends LazyDataModel
 
 	// Helpers ---------------------------------------------------------------------------------------------------------
 
-	private static Object normalizeCriteriaValue(Object value) {
-		return unmodifiableSet(stream(value).collect(toLinkedSet()));
-	}
+    private static boolean isCollection(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (obj.getClass()
+               .isArray()) {
+            return true;
+        }
+
+        if (obj instanceof Collection<?>) {
+            return true;
+        }
+
+        if (obj instanceof Iterable<?>) {
+            return true;
+        }
+
+        if (obj instanceof Stream<?>) {
+            return true;
+        }
+
+        if (obj instanceof Map<?, ?>) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private static Object normalizeCriteriaValue(Object value) {
+        return isCollection(value) ? unmodifiableSet(stream(value).collect(toLinkedSet())) : value;
+    }
 
     private static Object mergeCriteriaValue(Object oldValue, Object newValue) {
         Set<Object> oldValues = stream(oldValue).collect(toLinkedSet());
