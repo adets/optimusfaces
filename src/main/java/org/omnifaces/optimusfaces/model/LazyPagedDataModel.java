@@ -485,7 +485,6 @@ public class LazyPagedDataModel<E extends Identifiable<?>> extends LazyDataModel
             filterMeta = FilterMeta.builder()
                                    .field(field)
                                    .build();
-            this.filters.put(field, filterMeta);
         }
 
         return filterMeta;
